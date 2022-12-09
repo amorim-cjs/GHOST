@@ -43,7 +43,7 @@ FixValue::FixValue( const std::vector<Variable>& variables, int value )
 	  _value( value )
 { }
 
-double FixValue::required_error( const std::vector<Variable*>& variables ) const
+double FixValue::required_error( const std::vector<VARIABLE_P>& variables ) const
 {
 	double error = 0.;
 	for( auto& var : variables )
@@ -51,7 +51,7 @@ double FixValue::required_error( const std::vector<Variable*>& variables ) const
 	return error;
 }
 
-double FixValue::optional_delta_error( const std::vector<Variable*>& variables,
+double FixValue::optional_delta_error( const std::vector<VARIABLE_P>& variables,
                                        const std::vector<int>& variable_indexes,
                                        const std::vector<int>& candidate_values ) const
 {

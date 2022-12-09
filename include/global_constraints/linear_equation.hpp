@@ -67,14 +67,14 @@ namespace ghost
 			LinearEquation( const std::vector<Variable>& variables, double rhs, const std::vector<double>& coefficients );
 
 			virtual double compute_error( double sum ) const = 0;
+			// TODO: avoid raw pointer
+			double required_error( const std::vector<VARIABLE_P>& variables ) const override;
 
-			double required_error( const std::vector<Variable*>& variables ) const override;
-
-			double optional_delta_error( const std::vector<Variable*>& variables,
+			double optional_delta_error( const std::vector<VARIABLE_P>& variables,
 			                             const std::vector<int>& variable_indexes,
 			                             const std::vector<int>& candidate_values ) const override;
 
-			void conditional_update_data_structures( const std::vector<Variable*>& variables, int variable_id, int new_value ) override;
+			void conditional_update_data_structures( const std::vector<VARIABLE_P>& variables, int variable_id, int new_value ) override;
 
 		};
 	}

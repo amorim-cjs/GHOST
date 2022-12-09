@@ -152,7 +152,7 @@ namespace ghost
 		 *
 		 * \return The vector of integers composing the domain.
 		 */
-		inline std::vector<int> get_full_domain() const { return _domain; }
+		inline const std::vector<int>& get_full_domain() const { return _domain; }
 
 		/*!
 		 * Method returning the range of values
@@ -225,5 +225,20 @@ namespace ghost
 				<< "\nDomain: " << domain
 				<< "\n--------";
 		}
+
+#ifdef GHOST_PYTHON_LAYER
+		Variable* operator->() { return this; }
+		const Variable* operator->() const { return this; }
+		Variable& operator*() { return *this; }
+		const Variable& operator*() const { return *this; }
+#endif
 	};
+
+#ifdef GHOST_PYTHON_LAYER
+#define VARIABLE_P Variable
+//	using Variable_p = Variable;
+#else
+#define VARIABLE_P Variable*
+	using Variable_p = Variable*;
+#endif
 }

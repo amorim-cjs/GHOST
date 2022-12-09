@@ -56,7 +56,7 @@ AllDifferent::AllDifferent( const std::vector<Variable>& variables )
 { }
 
 // SOFT_ALLDIFF error function (Petit et al. 2001)
-double AllDifferent::required_error( const std::vector<Variable*>& variables ) const
+double AllDifferent::required_error( const std::vector<VARIABLE_P>& variables ) const
 {
 	double counter = 0;
 	_count.clear();
@@ -74,7 +74,7 @@ double AllDifferent::required_error( const std::vector<Variable*>& variables ) c
 	return counter;
 }
 
-double AllDifferent::optional_delta_error( const std::vector<Variable*>& variables, const std::vector<int>& variable_indexes, const std::vector<int>& candidate_values ) const
+double AllDifferent::optional_delta_error( const std::vector<VARIABLE_P>& variables, const std::vector<int>& variable_indexes, const std::vector<int>& candidate_values ) const
 {
 	double diff = 0.0;
 	auto copy_count( _count );
@@ -99,7 +99,7 @@ double AllDifferent::optional_delta_error( const std::vector<Variable*>& variabl
 	return diff;
 }
 
-void AllDifferent::conditional_update_data_structures( const std::vector<Variable*>& variables, int variable_index, int new_value )
+void AllDifferent::conditional_update_data_structures( const std::vector<VARIABLE_P>& variables, int variable_index, int new_value )
 {
 	_count[ variables[ variable_index ]->get_value() ] = _count[ variables[ variable_index ]->get_value() ] - 1;
 

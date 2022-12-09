@@ -37,3 +37,13 @@
 #else
 #define COUT std::cout
 #endif
+
+#ifdef GHOST_PYTHON_LAYER_ // Requires an adapter layer
+#define CONSTRAINT_VECTOR std::vector<Constraint>
+#define OBJECTIVE_T Objective
+#define AUX_DATA_T AuxiliaryData
+#else
+#define CONSTRAINT_VECTOR std::vector<std::shared_ptr<Constraint>>
+#define OBJECTIVE_T std::shared_ptr<Objective>
+#define AUX_DATA_T std::shared_ptr<AuxiliaryData>
+#endif // GHOST_PYTHON_LAYER

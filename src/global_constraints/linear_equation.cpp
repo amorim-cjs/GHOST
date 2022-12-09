@@ -47,7 +47,7 @@ LinearEquation::LinearEquation( const std::vector<Variable>& variables, double r
 	  rhs( rhs )
 { }
 
-double LinearEquation::required_error( const std::vector<Variable*>& variables ) const
+double LinearEquation::required_error( const std::vector<VARIABLE_P>& variables ) const
 {
 	_current_sum = 0.0;
 	for( size_t i = 0 ; i < variables.size() ; ++i )
@@ -56,7 +56,7 @@ double LinearEquation::required_error( const std::vector<Variable*>& variables )
 	return compute_error( _current_sum );
 }
 
-double LinearEquation::optional_delta_error( const std::vector<Variable*>& variables,
+double LinearEquation::optional_delta_error( const std::vector<VARIABLE_P>& variables,
                                              const std::vector<int>& variable_indexes,
                                              const std::vector<int>& candidate_values ) const
 {
@@ -68,7 +68,7 @@ double LinearEquation::optional_delta_error( const std::vector<Variable*>& varia
 	return compute_error( sum ) - get_current_error();
 } 
 
-void LinearEquation::conditional_update_data_structures( const std::vector<Variable*>& variables, int variable_index, int new_value ) 
+void LinearEquation::conditional_update_data_structures( const std::vector<VARIABLE_P>& variables, int variable_index, int new_value ) 
 {
 	_current_sum += _coefficients[ variable_index ] * ( new_value - variables[ variable_index ]->get_value() );
 }

@@ -63,10 +63,10 @@ double Objective::cost() const
 	return value;
 }
 
-void Objective::conditional_update_data_structures( const std::vector<Variable*>& variables, int index, int new_value )
+void Objective::conditional_update_data_structures( const std::vector<VARIABLE_P>& variables, int index, int new_value )
 { }
 
-int Objective::expert_heuristic_value( const std::vector<Variable*>& variables,
+int Objective::expert_heuristic_value( const std::vector<VARIABLE_P>& variables,
                                        int variable_index,
                                        const std::vector<int>& possible_values,
                                        randutils::mt19937_rng& rng ) const
@@ -108,7 +108,7 @@ int Objective::expert_heuristic_value( const std::vector<Variable*>& variables,
 			return backup;			
 }
 
-int Objective::expert_heuristic_value_permutation( const std::vector<Variable*>& variables,
+int Objective::expert_heuristic_value_permutation( const std::vector<VARIABLE_P>& variables,
                                                    int variable_index,
                                                    const std::vector<int>& bad_variables,
                                                    randutils::mt19937_rng& rng ) const
@@ -116,7 +116,7 @@ int Objective::expert_heuristic_value_permutation( const std::vector<Variable*>&
 	return rng.pick( bad_variables );
 }
 
-double Objective::expert_postprocess( const std::vector<Variable*>& variables,
+double Objective::expert_postprocess( const std::vector<VARIABLE_P>& variables,
                                       double best_cost ) const
 {
 	return best_cost;

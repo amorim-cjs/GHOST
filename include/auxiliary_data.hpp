@@ -57,7 +57,7 @@ namespace ghost
 		friend class SearchUnit;
 		friend class ModelBuilder;
 
-		std::vector<Variable*> _variables;
+		std::vector<VARIABLE_P> _variables; // TODO: avoid raw pointer
 		std::vector<int> _variables_index; // To know where are the constraint's variables in the global variable vector
 		std::map<int,int> _variables_position; // To know where are global variables in the constraint's variables vector 
 
@@ -77,7 +77,7 @@ namespace ghost
 		 * the solver.
 		 * \param new_value an integer to know what is the new value of 'variables[index]'.
 		 */
-		virtual void required_update( const std::vector<Variable*>& variables, int index, int new_value ) = 0;
+		virtual void required_update( const std::vector<VARIABLE_P>& variables, int index, int new_value ) = 0;
 
 	public:
 		//! Constructor instanciating an empty vector of variable IDs
@@ -122,6 +122,6 @@ namespace ghost
 			: AuxiliaryData()
 		{ }
 
-		void required_update( const std::vector<Variable*>& variables, int index, int new_value ) override { }
+		void required_update( const std::vector<VARIABLE_P>& variables, int index, int new_value ) override { }
 	};
 }

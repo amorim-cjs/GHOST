@@ -66,29 +66,34 @@ namespace ghost
 		friend class algorithms::AdaptiveSearchErrorProjection;
 		friend class algorithms::CulpritSearchErrorProjection;
 
-		std::vector<Variable*> _variables;
+		std::vector<VARIABLE_P> _variables; // TODO: avoid raw pointer
 		std::vector<int> _variables_index; // To know where are the constraint's variables in the global variable vector
 		std::map<int,int> _variables_position; // To know where are global variables in the constraint's variables vector 
+		//std::vector<int> _delta_error_variables_index_within_constraint; // working array for delta_error
 
 		double _current_error; // Current error of the constraint.
 
 		int _id; // Unique ID integer
 		mutable bool _is_optional_delta_error_defined; // Boolean telling if optional_delta_error() is overrided or not.
 
+		mutable std::vector<int> _delta_error_variables_index_within_constraint; // working array for delta_error
+
 		struct nanException : std::exception
 		{
-			std::vector<Variable*> ptr_variables;
+			std::vector<VARIABLE_P> ptr_variables;
 			std::vector<Variable> variables;
 			std::string message;
 
-			nanException( const std::vector<Variable*>& ptr_variables ) : ptr_variables(ptr_variables)
+			// TODO: strike out for Python
+#ifndef GHOST_PYTHON_LAYER
+			nanException( const std::vector<VARIABLE_P>& ptr_variables ) : ptr_variables(ptr_variables)
 			{
 				message = "Constraint required_error returned a NaN value on variables (";
 				for( int i = 0; i < static_cast<int>( ptr_variables.size() ) - 1; ++i )
 					message += std::to_string( ptr_variables[i]->get_value() ) + ", ";
 				message += std::to_string( ptr_variables[ static_cast<int>( ptr_variables.size() ) - 1 ]->get_value() ) + ")\n";
 			}
-
+#endif // !GHOST_PYTHON_LAYER
 			nanException( const std::vector<Variable>& variables ) : variables(variables)
 			{
 				message = "Constraint optional_delta_error returned a NaN value on variables (";
@@ -102,11 +107,11 @@ namespace ghost
 
 		struct negativeException : std::exception
 		{
-			std::vector<Variable*> ptr_variables;
+			std::vector<VARIABLE_P> ptr_variables; // TODO: avoid raw pointer
 			std::vector<Variable> variables;
 			std::string message;
 
-			negativeException( const std::vector<Variable*>& ptr_variables ) : ptr_variables(ptr_variables)
+			negativeException( const std::vector<VARIABLE_P>& ptr_variables ) : ptr_variables(ptr_variables)
 			{
 				message = "Constraint required_error returned a negative value on variables (";
 				for( int i = 0; i < static_cast<int>( ptr_variables.size() ) - 1; ++i )
@@ -198,7 +203,7 @@ namespace ghost
 		 * Outputing 0 means that given variable values satisfy the constraint.
 		 * \exception Throws an exception if the computed value is negative or is NaN.
 		 */
-		virtual double required_error( const std::vector<Variable*>& variables ) const = 0;
+		virtual double required_error( const std::vector<VARIABLE_P>& variables ) const = 0;
 
 		/*!
 		 * Virtual method to compute the difference, or delta, between the current error and
@@ -237,7 +242,7 @@ namespace ghost
 		 * variables.
 		 * \exception Throws an exception if the computed value is NaN.
 		 */
-		virtual double optional_delta_error( const std::vector<Variable*>& variables, const std::vector<int>& indexes, const std::vector<int>& candidate_values ) const;
+		virtual double optional_delta_error( const std::vector<VARIABLE_P>& variables, const std::vector<int>& indexes, const std::vector<int>& candidate_values ) const;
 
 		/*!
 		 * Update user-defined data structures in the constraint.
@@ -254,7 +259,7 @@ namespace ghost
 		 * the solver.
 		 * \param new_value an integer to know what is the new value of 'variables[index]'.
 		 */
-		virtual void conditional_update_data_structures( const std::vector<Variable*>& variables, int index, int new_value );
+		virtual void conditional_update_data_structures( const std::vector<VARIABLE_P>& variables, int index, int new_value );
 
 		/*!
 		 * Inline method returning the current error of the constraint (automatically updated by the

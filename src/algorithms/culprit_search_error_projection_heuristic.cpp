@@ -112,7 +112,7 @@ void CulpritSearchErrorProjection::compute_variable_errors_on_constraint( const 
 void CulpritSearchErrorProjection::compute_variable_errors( std::vector<double>& error_variables,
                                                             const std::vector<Variable>& variables,
                                                             const std::vector<std::vector<int>>& matrix_var_ctr,
-                                                            const std::vector<std::shared_ptr<Constraint>>& constraints )
+                                                            const CONSTRAINT_VECTOR& constraints )
 {
 	std::fill( error_variables.begin(), error_variables.end(), 0. );
 	

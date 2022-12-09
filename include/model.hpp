@@ -38,22 +38,24 @@
 #include "objective.hpp"
 #include "auxiliary_data.hpp"
 
+#include "macros.hpp"
+
 namespace ghost
 {
 	struct Model final
 	{
 		std::vector<Variable> variables;
-		std::vector<std::shared_ptr<Constraint>> constraints;
-		std::shared_ptr<Objective> objective;
-		std::shared_ptr<AuxiliaryData> auxiliary_data;
+		CONSTRAINT_VECTOR constraints;
+		OBJECTIVE_T objective;
+		AUX_DATA_T auxiliary_data;
 		bool permutation_problem;
 
 		Model() = default;
 		
 		Model( std::vector<Variable>&& variables,
-		       const std::vector<std::shared_ptr<Constraint>>&	constraints,
-		       const std::shared_ptr<Objective>& objective,
-		       const std::shared_ptr<AuxiliaryData>& auxiliary_data,
+		       const CONSTRAINT_VECTOR&	constraints,
+		       const OBJECTIVE_T& objective,
+		       const AUX_DATA_T& auxiliary_data,
 		       bool permutation_problem );
 	};
 }

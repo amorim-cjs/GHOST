@@ -34,6 +34,7 @@
 
 #include "../constraint.hpp"
 #include "../variable.hpp"
+#include "macros.hpp"
 
 namespace ghost
 {
@@ -63,7 +64,7 @@ namespace ghost
 			virtual void compute_variable_errors( std::vector<double>& error_variables,
 			                                      const std::vector<Variable>& variables,
 			                                      const std::vector<std::vector<int>>& matrix_var_ctr,
-			                                      const std::vector<std::shared_ptr<Constraint>>& constraints ) = 0;
+			                                      const CONSTRAINT_VECTOR& constraints ) = 0;
 
 			virtual void update_variable_errors( std::vector<double>& error_variables,
 			                                     const std::vector<Variable>& variables,

@@ -71,7 +71,7 @@ namespace ghost
 		friend class algorithms::AdaptiveSearchValueHeuristic;
 		friend class algorithms::AntidoteSearchValueHeuristic;
 		
-		std::vector<Variable*> _variables; // Vector of raw pointers to variables needed to compute the objective function.
+		std::vector<VARIABLE_P> _variables; // Vector of raw pointers to variables needed to compute the objective function.
 		std::vector<int> _variables_index; // To know where are the constraint's variables in the global variable vector.
 		std::map<int,int> _variables_position; // To know where are global variables in the constraint's variables vector. 
 		bool _is_optimization;
@@ -80,10 +80,10 @@ namespace ghost
 
 		struct nanException : std::exception
 		{
-			std::vector<Variable*> variables;
+			std::vector<VARIABLE_P> variables; // TODO: avoid raw pointer
 			std::string message;
 
-			nanException( const std::vector<Variable*>& variables ) : variables(variables)
+			nanException( const std::vector<VARIABLE_P>& variables ) : variables(variables)
 			{
 				message = "Objective required_cost returned a NaN value on variables (";
 				for( int i = 0; i < static_cast<int>( variables.size() ) - 1; ++i )
@@ -142,7 +142,7 @@ namespace ghost
 		 * configuration. Unlike Constraint::required_error, this output may be negative.
 		 * \exception Throws an exception if the computed value is NaN.
 		 */
-		virtual double required_cost( const std::vector<Variable*>& variables ) const = 0;
+		virtual double required_cost( const std::vector<VARIABLE_P>& variables ) const = 0;
 
 		/*!
 		 * Update user-defined data structures in the objective function.
@@ -159,7 +159,7 @@ namespace ghost
 		 * the solver.
 		 * \param new_value an integer to know what is the new value of 'variables[index]'.
 		 */
-		virtual void conditional_update_data_structures( const std::vector<Variable*>& variables, int index, int new_value );
+		virtual void conditional_update_data_structures( const std::vector<VARIABLE_P>& variables, int index, int new_value );
 
 		/*!
 		 * Virtual method to apply the value heuristic used by the solver for non permutation
@@ -186,7 +186,7 @@ namespace ghost
 		 * \param rng a neat random generator implemented in thirdparty/randutils.hpp, see https://www.pcg-random.org/posts/ease-of-use-without-loss-of-power.html
 		 * \return The selected value according to the heuristic.
 		 */
-		virtual int expert_heuristic_value( const std::vector<Variable*>& variables,
+		virtual int expert_heuristic_value( const std::vector<VARIABLE_P>& variables,
 		                                    int variable_index,
 		                                    const std::vector<int>& possible_values,
 		                                    randutils::mt19937_rng& rng ) const;
@@ -211,7 +211,7 @@ namespace ghost
 		 * \param rng a neat random generator implemented in thirdparty/randutils.hpp, see https://www.pcg-random.org/posts/ease-of-use-without-loss-of-power.html
 		 * \return The index of the selected variable to swap with, according to the heuristic.
 		 */
-		virtual int expert_heuristic_value_permutation( const std::vector<Variable*>& variables,
+		virtual int expert_heuristic_value_permutation( const std::vector<VARIABLE_P>& variables,
 		                                                int variable_index,
 		                                                const std::vector<int>& bad_variables,
 		                                                randutils::mt19937_rng& rng ) const;
@@ -241,7 +241,7 @@ namespace ghost
 		 * so far. This helps users be sure that their post-processing leads to actual improvements.
 		 * \return The new error after post-processing.
 		 */
-		virtual double expert_postprocess( const std::vector<Variable*>& variables,
+		virtual double expert_postprocess( const std::vector<VARIABLE_P>& variables,
 		                                   double best_cost ) const;
 
 
@@ -295,7 +295,7 @@ namespace ghost
 		}
 
 	private:
-		double required_cost( const std::vector<Variable*>& variables ) const override { return 0.0; }
+		double required_cost( const std::vector<VARIABLE_P>& variables ) const override { return 0.0; }
 	};
 
 	/**************/

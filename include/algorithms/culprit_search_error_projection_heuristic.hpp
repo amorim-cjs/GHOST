@@ -51,7 +51,7 @@ namespace ghost
 			void compute_variable_errors( std::vector<double>& error_variables,
 			                              const std::vector<Variable>& variables,
 			                              const std::vector<std::vector<int>>& matrix_var_ctr,
-			                              const std::vector<std::shared_ptr<Constraint>>& constraints ) override;
+			                              const CONSTRAINT_VECTOR& constraints ) override;
 			
 			void update_variable_errors( std::vector<double>& error_variables,
 			                             const std::vector<Variable>& variables,

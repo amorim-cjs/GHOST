@@ -47,13 +47,13 @@ namespace ghost
 		{
 			mutable std::map<int,int> _count;
 			
-			double required_error( const std::vector<Variable*>& variables ) const override;
+			double required_error( const std::vector<VARIABLE_P>& variables ) const override;
 			
-			double optional_delta_error( const std::vector<Variable*>& variables,
+			double optional_delta_error( const std::vector<VARIABLE_P>& variables,
 			                             const std::vector<int>& variable_indexes,
 			                             const std::vector<int>& candidate_values ) const override;
 			
-			void conditional_update_data_structures( const std::vector<Variable*>& variables,
+			void conditional_update_data_structures( const std::vector<VARIABLE_P>& variables,
 			                                         int variable_index,
 			                                         int new_value ) override;
 

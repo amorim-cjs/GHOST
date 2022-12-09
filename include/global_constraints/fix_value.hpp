@@ -48,9 +48,9 @@ namespace ghost
 		class FixValue : public Constraint
 		{
 			int _value;
-
-			double required_error( const std::vector<Variable*>& variables ) const override;
-			double optional_delta_error( const std::vector<Variable*>& variables,
+			// TODO: avoid raw pointer
+			double required_error( const std::vector<VARIABLE_P>& variables ) const override;
+			double optional_delta_error( const std::vector<VARIABLE_P>& variables,
 			                             const std::vector<int>& variable_indexes,
 			                             const std::vector<int>& candidate_values ) const override;
 	

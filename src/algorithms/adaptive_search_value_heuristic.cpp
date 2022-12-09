@@ -39,6 +39,7 @@ using ghost::Model;
 AdaptiveSearchValueHeuristic::AdaptiveSearchValueHeuristic()
 	: ValueHeuristic( "Adaptive Search" )
 { }
+
 		
 int AdaptiveSearchValueHeuristic::select_value_candidates( int variable_to_change,
                                                            const SearchUnitData& data,
@@ -49,6 +50,7 @@ int AdaptiveSearchValueHeuristic::select_value_candidates( int variable_to_chang
 {
 	std::vector<int> candidate_values;
 	std::map<int, double> cumulated_delta_errors;
+	// Allocation bottle-neck: consider custom allocator
 	for( const auto& deltas : delta_errors )
 		cumulated_delta_errors[ deltas.first ] = std::accumulate( deltas.second.begin(), deltas.second.end(), 0.0 );
 

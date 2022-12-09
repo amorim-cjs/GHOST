@@ -40,7 +40,9 @@ Constraint::Constraint( const std::vector<int>& variables_index )
 	  _current_error( std::numeric_limits<double>::max() ),
 	  _id( 0 ),
 	  _is_optional_delta_error_defined( true )
-{ }
+{
+	_delta_error_variables_index_within_constraint.reserve(_variables_index.size());
+}
 
 Constraint::Constraint( const std::vector<Variable>& variables )
 	: _variables_index( std::vector<int>( variables.size() ) ),
@@ -52,6 +54,7 @@ Constraint::Constraint( const std::vector<Variable>& variables )
 	                variables.end(),
 	                _variables_index.begin(),
 	                [&](const auto& v){ return v.get_id(); } );
+	_delta_error_variables_index_within_constraint.reserve(_variables_index.size());
 }
 
 double Constraint::error() const
@@ -66,13 +69,16 @@ double Constraint::error() const
 
 double Constraint::delta_error( const std::vector<int>& variables_index, const std::vector<int>& new_values ) const
 {
-	std::vector<int> variables_index_within_constraint( variables_index.size() );
+	//std::vector<int> variables_index_within_constraint(variables_index.size());
+	//static std::vector<int> variables_index_within_constraint;// (variables_index.size());
+	//variables_index_within_constraint.resize(variables_index.size());
+	_delta_error_variables_index_within_constraint.resize(variables_index.size());
 	std::transform( variables_index.begin(),
 	                variables_index.end(),
-	                variables_index_within_constraint.begin(),
+		_delta_error_variables_index_within_constraint.begin(),
 	                [&]( auto index ){ return _variables_position.at( index ); } );
 
-	double value = optional_delta_error( _variables, variables_index_within_constraint, new_values );
+	double value = optional_delta_error( _variables, _delta_error_variables_index_within_constraint, new_values );
 	if( std::isnan( value ) )
 	{
 		std::vector<Variable> changed_variables( _variables.size() );
@@ -82,7 +88,7 @@ double Constraint::delta_error( const std::vector<int>& variables_index, const s
 		                [&]( auto& var ){ return *var; } );
 
 		for( int i = 0 ; i < static_cast<int>( new_values.size() ) ; ++i )
-			changed_variables[ variables_index_within_constraint[i] ].set_value( new_values[i] );
+			changed_variables[_delta_error_variables_index_within_constraint[i] ].set_value( new_values[i] );
 		throw nanException( changed_variables );
 	}
 	return value;
@@ -118,10 +124,10 @@ bool Constraint::has_variable( int var_id ) const
 	return _variables_position.count( var_id ) > 0;
 }
 
-double Constraint::optional_delta_error( const std::vector<Variable*>& variables, const std::vector<int>& indexes, const std::vector<int>& candidate_values ) const
+double Constraint::optional_delta_error( const std::vector<VARIABLE_P>& variables, const std::vector<int>& indexes, const std::vector<int>& candidate_values ) const
 {
 	_is_optional_delta_error_defined = false;
 	throw deltaErrorNotDefinedException();
 }
 
-void Constraint::conditional_update_data_structures( const std::vector<Variable*>& variables, int index, int new_value ) { }
+void Constraint::conditional_update_data_structures( const std::vector<VARIABLE_P>& variables, int index, int new_value ) { }

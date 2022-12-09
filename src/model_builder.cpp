@@ -64,7 +64,11 @@ Model ModelBuilder::build_model()
 		// Set also constraints' variables and their internal data structures
 		for( int index = 0 ; index < static_cast<int>( constraints[ constraint_id ]->_variables_index.size() ) ; ++index )
 		{
+#ifndef GHOST_PYTHON_LAYER
 			constraints[ constraint_id ]->_variables.push_back( &variables[ constraints[ constraint_id ]->_variables_index[ index ] ] );
+#else
+			constraints[constraint_id]->_variables.push_back(variables[constraints[constraint_id]->_variables_index[index]]);
+#endif
 			constraints[ constraint_id ]->_variables_position[ constraints[ constraint_id ]->_variables_index[ index ] ] = index;
 		}
 	}
@@ -72,14 +76,22 @@ Model ModelBuilder::build_model()
 	// Set auxiliary data's variables and its internal data structures
 	for( int index = 0 ; index < static_cast<int>( auxiliary_data->_variables_index.size() ) ; ++index )
 	{
+#ifndef GHOST_PYTHON_LAYER
 		auxiliary_data->_variables.push_back( &variables[ auxiliary_data->_variables_index[ index ] ] );
+#else
+		auxiliary_data->_variables.push_back(variables[auxiliary_data->_variables_index[index]]);
+#endif
 		auxiliary_data->_variables_position[ auxiliary_data->_variables_index[ index ] ] = index;
 	}
 
 	// Set objective function's variables and its internal data structures
 	for( int index = 0 ; index < static_cast<int>( objective->_variables_index.size() ) ; ++index )
 	{
+#ifndef GHOST_PYTHON_LAYER
 		objective->_variables.push_back( &variables[ objective->_variables_index[ index ] ] );
+#else
+		objective->_variables.push_back(variables[objective->_variables_index[index]]);
+#endif
 		objective->_variables_position[ objective->_variables_index[ index ] ] = index;
 	}
 
@@ -98,6 +110,17 @@ void ModelBuilder::create_n_variables( int number, int starting_value, std::size
 		variables.emplace_back( starting_value, size, index );
 }
 
+#ifdef GHOST_PYTHON_LAYER_ // may require adapter layer
+void ModelBuilder::declare_objective()
+{
+	objective = std::make_shared<NullObjective>();
+}
+
+void ModelBuilder::declare_auxiliary_data()
+{
+	auxiliary_data = std::make_shared<NullAuxiliaryData>();
+}
+#else
 
 void ModelBuilder::declare_objective()
 {
@@ -108,3 +131,4 @@ void ModelBuilder::declare_auxiliary_data()
 {
 	auxiliary_data = std::make_shared<NullAuxiliaryData>();
 }
+#endif // GHOST_PYTHON_LAYER_
